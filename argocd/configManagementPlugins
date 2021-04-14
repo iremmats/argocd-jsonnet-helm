@@ -1,0 +1,14 @@
+- name: jsonnet-helm
+  init:
+    command: ["/bin/sh", "-c"]
+    args: ["jsonnet -m . helm-chart.libsonnet && helm dependency build && [ -d './templates' ] && jsonnet ./templates/_templates.jsonnet > ./templates/templates.yaml || exit 0"]
+  generate:
+    command: ["/bin/sh", "-c"]
+    args: ["helm template $ARGOCD_APP_NAME . --namespace $ARGOCD_APP_NAMESPACE"]
+- name: jsonnet-helm-with-crds
+  init:
+    command: ["/bin/sh", "-c"]
+    args: ["jsonnet -m . helm-chart.libsonnet && helm dependency build && [ -d './templates' ] && jsonnet ./templates/_templates.jsonnet > ./templates/templates.yaml || exit 0"]
+  generate:
+    command: ["/bin/sh", "-c"]
+    args: ["helm template $ARGOCD_APP_NAME . --namespace $ARGOCD_APP_NAMESPACE --include-crds"]
